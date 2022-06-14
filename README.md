@@ -1,6 +1,6 @@
 # opa-http-send
 
-Simple test of OPA's `http.send` built in function with caching.
+Simple test of OPA's `http.send` built-in function with caching.
 
 ## Run OPA as a server
 ```sh
@@ -8,12 +8,15 @@ opa run --server rules.rego
 ```
 
 ## Query OPA with metrics
-Query 1 - when the cache is empty.  The call will take the full 5 seconds
+
+**Query 1 Request**
+
+When the cache is empty, the call will take the full 5 seconds.  Append `metrics=true` to have OPA return the performance metrics.
 ```sh
-curl localhost:8181/v1/data/rules/response/status_code\?metrics | jq .
+curl 'localhost:8181/v1/data/rules/response/status_code?metrics=true' | jq .
 ```
 
-Query 1 Response
+**Query 1 Response**
 ```less
 {
   "metrics": {
@@ -30,12 +33,14 @@ Query 1 Response
 ```
 The `timer_rego_builtin_http_send_ns` metric shows the call took over 5 seconds (5160468004 nanoseconds) to complete.
 
-Query 2 - Repeat Query 1 - the response will be retrieved from cache.
+**Query 2 Request**
+
+Repeat query 1, the response will be retrieved from cache.
 ```sh
-curl localhost:8181/v1/data/rules/response/status_code\?metrics | jq .
+curl 'localhost:8181/v1/data/rules/response/status_code?metrics=true' | jq .
 ```
 
-Query 2 Response
+**Query 2 Response**
 ```less
 {
   "metrics": {
